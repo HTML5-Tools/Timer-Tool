@@ -1,0 +1,49 @@
+#ux {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;   
+}
+#settings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+}
+#timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* テキストを垂直方向の中央に配置 */
+    height: calc(100vh - 25px); /* 高さを画面全体に戻します */
+    border-radius: 8px;
+    transition: background-color 0.3s ease; /* 色が滑らかに変わるアニメーション */
+}
+#timeleft {
+    font-size: 100px;
+    color: #333;
+    margin: 0; /* pタグのデフォルトマージンをリセット */
+  }
+.distance {
+    margin: 20px;
+}
+.distance-tb {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#timer[timerColor="ready"] {
+  background-color: #a0d8f0; /* 準備完了時: 水色 */
+}
+#timer[timerColor="normal"] {
+  background-color: #ffd82a; /* 作動中: 黄色 */
+}
+#timer[timerColor="interval"] {
+  background-color: #e0e0e0; /* インターバル中: 明るい灰色 */
+}
+#timer[timerColor="end"] {
+  background-color: #f0a0a0; /* 終了時: 明るい赤色 */
+}

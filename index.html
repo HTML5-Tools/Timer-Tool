@@ -1,0 +1,47 @@
+<!-- Timer by budou10 -->
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>タイマー | HTML5 Tools</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js" defer></script>
+        <link rel="icon" type="image/png" href="icon.png" id="icon">
+    </head>
+    <body>
+        
+        <div id="titlebar">
+            <h1>タイマー | <a href="https://html5tools.netlify.app">HTML5 Tools</a></h1>
+        </div>
+        <p>Webで動くタイマー。タイマーの部分が大きく、見やすいスタイル。何秒間を何回繰り返すなども指定可能。</p>
+        <p>Version 1.0 | Copyright &copy; 2025 | License: Apache License 2.0 <!-- | <a href="https://forms.gle/sWWqgbf4NWHUnuZV6">フィードバックフォーム</a> --></p>
+        <div id="ux">
+            <div id="settings">
+                <label>
+                    時間（秒）:
+                    <input type="number" id="time" value="10" min="1">
+                </label>
+                <label>
+                    <input type="checkbox" id="repeating" checked>
+                    タイマーを繰り返す
+                </label>
+                <label>
+                    繰り返し回数:
+                    <input type="number" id="repeat" value="3" min="1">
+                </label>
+                <label>
+                    １回ごとに開ける間隔（秒）:
+                    <input type="number" id="interval" value="5" min="0">
+                </label>
+            </div>
+            <div id="startbuttons">
+                <button id="start">スタート</button>
+                <button id="stop">ストップ</button>
+                <button id="reset">リセット</button>
+            </div>
+        </div>
+        <div id="timer" class="distance" timerColor="ready">
+            <p id="timeleft">10</p>
+        </div>
+    </body>
+</html>
