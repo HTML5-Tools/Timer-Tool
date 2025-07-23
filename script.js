@@ -8,6 +8,7 @@ const stop = document.getElementById("stop");
 const reset = document.getElementById("reset");
 const timerContainer = document.getElementById("timer");
 const timeleftDisplay = document.getElementById("timeleft");
+const sound = document.getElementById("sound");
 
 // グローバル変数
 let timerId = null;
@@ -60,6 +61,13 @@ function updateUIForState(state) {
             stop.disabled = true;
             break;
     }
+}
+
+// --- サウンド管理関数 ---
+function stopSound() {
+    sound.pause();
+    sound.currentTime = 0;
+    sound.loop = false;
 }
 
 // --- LocalStorage関連の関数 ---
@@ -117,6 +125,11 @@ function loadTimerState() {
     return null;
 }
 
+if(localStorage.getItem("notFirstTime")) {
+    loadSettings();
+    timeleftDisplay.textContent = time.value || 10; // 初回以降の表示設定
+}; // 初回以降の設定読み込み
+
 // --- タイマーのコアロジック ---
 
 function startInterval() {
@@ -148,7 +161,11 @@ function updateTimer() {
     if (timeLeft <= 0) {
         clearInterval(timerId);
         timerId = null;
+
         if (repeating.checked && repeatCount > 1) {
+            // インターバル開始時に音を一度だけ再生
+            sound.currentTime = 0;
+            sound.play();
             repeatCount--;
             const intervalValue = parseInt(interval.value, 10);
             if (intervalValue > 0) {
@@ -163,11 +180,11 @@ function updateTimer() {
         } else {
             clearTimerState(); // 終了時に状態をクリア
             timerContainer.setAttribute('timerColor', 'end');
-            setTimeout(() => {
-                alert("タイマーが終了しました。");
-                isPaused = false;
-                updateUIForState('end');
-            }, 300);
+            sound.currentTime = 0;
+            sound.loop = true;
+            sound.play();
+            isPaused = false;
+            updateUIForState('end');
         }
     } else {
         timeLeft--;
@@ -208,6 +225,7 @@ function valueCheck() {
 }
 
 function startTimer() {
+    stopSound();
     if (timerId !== null || intervalTimerId !== null) return;
 
     updateUIForState('running');
@@ -242,6 +260,7 @@ function stopTimer() {
 }
 
 function resetTimer() {
+    stopSound();
     clearInterval(timerId);
     clearInterval(intervalTimerId);
     clearTimerState(); // 状態をクリア
@@ -290,7 +309,3 @@ repeating.addEventListener("change", repeatingCheck);
 start.addEventListener("click", valueCheck);
 stop.addEventListener("click", stopTimer);
 reset.addEventListener("click", resetTimer);
-
-// --- 初期化処理の実行 ---
-
-initialize();
