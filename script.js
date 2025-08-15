@@ -309,3 +309,14 @@ repeating.addEventListener("change", repeatingCheck);
 start.addEventListener("click", valueCheck);
 stop.addEventListener("click", stopTimer);
 reset.addEventListener("click", resetTimer);
+
+// タイトルクリックでトップへ移動するスクリプト
+window.addEventListener('DOMContentLoaded', () => {
+    const title_elem = document.getElementById('title');
+    console.log('title_elem:', title_elem);
+    if (title_elem) {
+        title_elem.addEventListener('click', () => {
+        window.location.href = 'https://html5tools.netlify.app/';
+    });
+    }
+});

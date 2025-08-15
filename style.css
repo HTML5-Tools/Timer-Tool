@@ -47,3 +47,9 @@
 #timer[timerColor="end"] {
   background-color: #f0a0a0; /* 終了時: 明るい赤色 */
 }
+.center {
+  text-align: center;
+}
+#title {
+  cursor: pointer;
+}

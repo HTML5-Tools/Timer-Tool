@@ -5,16 +5,20 @@
         <meta charset="UTF-8">
         <title>タイマー | HTML5 Tools</title>
         <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://html5tools.netlify.app/html5tools-title.css">
+        <link rel="stylesheet" href="https://html5tools.netlify.app/html5tools-footer.css">
         <script src="script.js" defer></script>
         <link rel="icon" type="image/png" href="icon.png" id="icon">
     </head>
     <body>
-        
-        <div id="titlebar">
-            <h1>タイマー | <a href="https://html5tools.netlify.app">HTML5 Tools</a></h1>
-        </div>
-        <p>Webで動くタイマー。タイマーの部分が大きく、見やすいスタイル。何秒間を何回繰り返すなども指定可能。</p>
-        <p>Version 2.0 | Copyright &copy; 2025 | License: Apache License 2.0 | アラーム音: ひふみセオリー様 <!-- | <a href="https://forms.gle/sWWqgbf4NWHUnuZV6">フィードバックフォーム</a> --></p>
+        <p class="center" id="catchcopy">だれでも、いつでも、Webで使えるツール集</p>
+        <p id="title">HTML5 Tools</p>
+        <p class="center">
+            Webで動くタイマー。タイマーの部分が大きく、見やすいスタイル。何秒間を何回繰り返すなども指定可能。
+            <br>
+            Version 2.0 | アラーム音: ひふみセオリー様 
+        </p>
+        <!-- | <a href="https://forms.gle/sWWqgbf4NWHUnuZV6">フィードバックフォーム</a> -->
         <div id="ux">
             <div id="settings">
                 <label>
@@ -44,5 +48,6 @@
             <p id="timeleft">10</p>
         </div>
         <audio src="sound.m4a" id="sound"></audio>
+        <footer>Copyright &copy; HTML5 Tools 2025 | ライセンス: Apache License 2.0 | <a href="https://x.gd/H5T_tmr_src" download>ソースコードをダウンロード</a> </footer>
     </body>
 </html>
