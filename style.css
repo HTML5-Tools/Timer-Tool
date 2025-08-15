@@ -53,3 +53,12 @@
 #title {
   cursor: pointer;
 }
+#tooltitle {
+    font-size: 3em;
+    font-weight: bold;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    color: #333;
+    margin-top: 16px;
+}
