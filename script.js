@@ -71,7 +71,7 @@ function stopSound() {
 }
 
 // --- LocalStorage関連の関数 ---
-
+// 設定値のみ保存
 function saveSettings() {
     localStorage.setItem('time', time.value);
     localStorage.setItem('repeating', repeating.checked);
@@ -79,6 +79,7 @@ function saveSettings() {
     localStorage.setItem('interval', interval.value);
 }
 
+// 設定値のみ復元
 function loadSettings() {
     if (localStorage.getItem("notFirstTime") === null) {
         localStorage.setItem("notFirstTime", "true");
@@ -98,46 +99,14 @@ function loadSettings() {
     }
 }
 
-function saveTimerState() {
-    const state = {
-        timeLeft: timeLeft,
-        intervalLeft: intervalLeft,
-        repeatCount: repeatCount,
-        isPaused: isPaused,
-        isRunning: timerId !== null || intervalTimerId !== null,
-        timerColor: timerContainer.getAttribute('timerColor')
-    };
-    localStorage.setItem('timerState', JSON.stringify(state));
-}
-
-function clearTimerState() {
-    localStorage.removeItem('timerState');
-}
-
-function loadTimerState() {
-    const savedStateJSON = localStorage.getItem('timerState');
-    if (!savedStateJSON) return null;
-
-    const savedState = JSON.parse(savedStateJSON);
-    if (savedState.isRunning || savedState.isPaused) {
-        return savedState;
-    }
-    return null;
-}
-
-if(localStorage.getItem("notFirstTime")) {
-    loadSettings();
-    timeleftDisplay.textContent = time.value || 10; // 初回以降の表示設定
-}; // 初回以降の設定読み込み
-
 // --- タイマーのコアロジック ---
+// 進行状況の保存・復元は削除
 
 function startInterval() {
     intervalLeft = parseInt(interval.value);
     timerContainer.setAttribute('timerColor', 'interval');
     timeleftDisplay.textContent = `次の開始まであと ${intervalLeft} 秒`;
     intervalTimerId = setInterval(updateInterval, 1000);
-    saveTimerState();
 }
 
 function updateInterval() {
@@ -152,9 +121,6 @@ function updateInterval() {
         timerContainer.setAttribute('timerColor', 'normal');
         timerId = setInterval(updateTimer, 1000);
     }
-    if (timerId !== null || intervalTimerId !== null) {
-        saveTimerState();
-    }
 }
 
 function updateTimer() {
@@ -163,7 +129,6 @@ function updateTimer() {
         timerId = null;
 
         if (repeating.checked && repeatCount > 1) {
-            // インターバル開始時に音を一度だけ再生
             sound.currentTime = 0;
             sound.play();
             repeatCount--;
@@ -171,14 +136,12 @@ function updateTimer() {
             if (intervalValue > 0) {
                 startInterval();
             } else {
-                // 間隔が0秒の場合は、インターバルをスキップしてすぐに次のタイマーを開始
                 timeLeft = parseInt(time.value);
                 timeleftDisplay.textContent = timeLeft;
                 timerContainer.setAttribute('timerColor', 'normal');
                 timerId = setInterval(updateTimer, 1000);
             }
         } else {
-            clearTimerState(); // 終了時に状態をクリア
             timerContainer.setAttribute('timerColor', 'end');
             sound.currentTime = 0;
             sound.loop = true;
@@ -189,9 +152,6 @@ function updateTimer() {
     } else {
         timeLeft--;
         timeleftDisplay.textContent = timeLeft;
-    }
-    if (timerId !== null || intervalTimerId !== null) {
-        saveTimerState(); // 1秒ごとに状態を保存
     }
 }
 
@@ -235,9 +195,11 @@ function startTimer() {
         if (intervalLeft > 0) {
             timerContainer.setAttribute('timerColor', 'interval');
             intervalTimerId = setInterval(updateInterval, 1000);
+            saveTimerState();
         } else {
             timerContainer.setAttribute('timerColor', 'normal');
             timerId = setInterval(updateTimer, 1000);
+            saveTimerState();
         }
     } else {
         timerContainer.setAttribute('timerColor', 'normal');
@@ -282,33 +244,20 @@ function resetTimer() {
 // --- 初期化処理 ---
 
 function initialize() {
-    // 1. まず設定値を読み込んで入力欄に反映させる
+    // 設定値のみ復元
     loadSettings();
     repeatingCheck();
 
-    // 2. 次に、保存されたタイマーの実行状態があるか確認する
-    const savedState = loadTimerState();
-    if (savedState) {
-        // 状態があれば、タイマーを復元する
-        timeLeft = savedState.timeLeft;
-        intervalLeft = savedState.intervalLeft;
-        repeatCount = savedState.repeatCount;
-        isPaused = true; // 常に一時停止状態で復元
-        timerContainer.setAttribute('timerColor', savedState.timerColor);
-        timeleftDisplay.textContent = savedState.timerColor === 'interval' ? `次の開始まであと ${savedState.intervalLeft} 秒` : savedState.timeLeft;
-        updateUIForState('paused');
-    } else {
-        // 状態がなければ、UIをリセットする
-        resetTimer();
-    }
+    // タイマー状態はリセット
+    resetTimer();
 }
 
 // --- イベントリスナーの設定 ---
-
-repeating.addEventListener("change", repeatingCheck);
-start.addEventListener("click", valueCheck);
-stop.addEventListener("click", stopTimer);
-reset.addEventListener("click", resetTimer);
+// 入力値変更時に設定を保存
+time.addEventListener("change", saveSettings);
+repeat.addEventListener("change", saveSettings);
+interval.addEventListener("change", saveSettings);
+repeating.addEventListener("change", saveSettings);
 
 // タイトルクリックでトップへ移動するスクリプト
 window.addEventListener('DOMContentLoaded', () => {
@@ -320,3 +269,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     }
 });
+
+// 初期化処理の実行
+initialize();
