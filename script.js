@@ -9,6 +9,7 @@ const reset = document.getElementById("reset");
 const timerContainer = document.getElementById("timer");
 const timeleftDisplay = document.getElementById("timeleft");
 const sound = document.getElementById("sound");
+const saveSettingsButton = document.getElementById("saveSettings");
 
 // グローバル変数
 let timerId = null;
@@ -77,13 +78,14 @@ function saveSettings() {
     localStorage.setItem('repeating', repeating.checked);
     localStorage.setItem('repeat', repeat.value);
     localStorage.setItem('interval', interval.value);
+    window.alert("設定を保存しました。");
 }
 
 // 設定値のみ復元
 function loadSettings() {
     if (localStorage.getItem("notFirstTime") === null) {
         localStorage.setItem("notFirstTime", "true");
-        repeating.checked = false;
+        repeating.checked = true;
     } else {
         const storedTime = localStorage.getItem("time");
         if (storedTime !== null) time.value = storedTime;
@@ -95,7 +97,7 @@ function loadSettings() {
         if (storedInterval !== null) interval.value = storedInterval;
 
         const storedRepeating = localStorage.getItem("repeating");
-        if (storedRepeating !== null) repeating.checked = storedRepeating === "true";
+        if (storedRepeating !== null) repeating.checked = (storedRepeating === "true");
     }
 }
 
@@ -161,6 +163,10 @@ function valueCheck() {
         alert("時間が入力されていない、もしくは形式が不正です。");
         return;
     }
+    if (timeValue <= 0){
+        alert("時間は1以上の値を入力してください。");
+        return;
+    }
 
     if (repeating.checked) {
         const repeatValue = parseInt(repeat.value, 10);
@@ -178,9 +184,6 @@ function valueCheck() {
             return;
         }
     }
-
-    saveSettings();
-
     startTimer();
 }
 
@@ -225,7 +228,6 @@ function resetTimer() {
     stopSound();
     clearInterval(timerId);
     clearInterval(intervalTimerId);
-    clearTimerState(); // 状態をクリア
     timerId = null;
     intervalTimerId = null;
     isPaused = false;
@@ -241,6 +243,12 @@ function resetTimer() {
     updateUIForState('ready');
 }
 
+function checkTimeVal(){
+    if (time.value > 0 && time.value !== "" && !isNaN(time.value)) {
+        timeleftDisplay.textContent = parseInt(time.value);
+    }
+}
+
 // --- 初期化処理 ---
 
 function initialize() {
@@ -253,11 +261,17 @@ function initialize() {
 }
 
 // --- イベントリスナーの設定 ---
-// 入力値変更時に設定を保存
-time.addEventListener("change", saveSettings);
-repeat.addEventListener("change", saveSettings);
-interval.addEventListener("change", saveSettings);
-repeating.addEventListener("change", saveSettings);
+// // 入力値変更時に設定を保存
+// time.addEventListener("change", saveSettings);
+// repeat.addEventListener("change", saveSettings);
+// interval.addEventListener("change", saveSettings);
+// repeating.addEventListener("change", saveSettings);
+saveSettingsButton.addEventListener("click", saveSettings);
+start.addEventListener("click", valueCheck);
+stop.addEventListener("click", stopTimer);
+reset.addEventListener("click", resetTimer);
+repeating.addEventListener("change", repeatingCheck);
+time.addEventListener("change", checkTimeVal);
 
 // タイトルクリックでトップへ移動するスクリプト
 window.addEventListener('DOMContentLoaded', () => {
