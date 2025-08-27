@@ -289,16 +289,5 @@ interval.addEventListener("change", () => {
     }
 });
 
-// タイトルクリックでトップへ移動するスクリプト
-window.addEventListener('DOMContentLoaded', () => {
-    const title_elem = document.getElementById('title');
-    console.log('title_elem:', title_elem);
-    if (title_elem) {
-        title_elem.addEventListener('click', () => {
-        window.location.href = 'https://html5tools.netlify.app/';
-    });
-    }
-});
-
 // 初期化処理の実行
 initialize();
