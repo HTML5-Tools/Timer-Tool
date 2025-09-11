@@ -103,7 +103,6 @@ function loadSettings() {
 }
 
 // --- タイマーのコアロジック ---
-// 進行状況の保存・復元は削除
 
 function startInterval() {
     intervalLeft = parseInt(interval.value);
@@ -222,7 +221,6 @@ function stopTimer() {
     intervalTimerId = null;
     isPaused = true;
     updateUIForState('paused');
-     // 停止状態を保存
 }
 
 function resetTimer() {
