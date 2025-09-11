@@ -198,12 +198,10 @@ function startTimer() {
         isPaused = false;
         if (intervalLeft > 0) {
             timerContainer.setAttribute('timerColor', 'interval');
-            intervalTimerId = setInterval(updateInterval, 1000);
-            saveTimerState();
+            intervalTimerId = setInterval(updateInterval, 1000);     
         } else {
             timerContainer.setAttribute('timerColor', 'normal');
             timerId = setInterval(updateTimer, 1000);
-            saveTimerState();
         }
     } else {
         timerContainer.setAttribute('timerColor', 'normal');
@@ -211,7 +209,6 @@ function startTimer() {
         repeatCount = repeating.checked ? parseInt(repeat.value) : 1;
         timeleftDisplay.textContent = timeLeft;
         timerId = setInterval(updateTimer, 1000);
-        saveTimerState();
     }
     timerContainer.scrollIntoView({
         behavior: "smooth"
@@ -225,7 +222,7 @@ function stopTimer() {
     intervalTimerId = null;
     isPaused = true;
     updateUIForState('paused');
-    saveTimerState(); // 停止状態を保存
+     // 停止状態を保存
 }
 
 function resetTimer() {
