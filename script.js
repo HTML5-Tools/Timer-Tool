@@ -55,9 +55,10 @@ function updateUIForState(state) {
             stop.disabled = true;
             break;
         case 'ready':
+            toggleInputs(false);
+            return;
         case 'end':
         default:
-            toggleInputs(false);
             start.disabled = false;
             stop.disabled = true;
             break;
@@ -158,32 +159,32 @@ function updateTimer() {
 }
 
 function valueCheck() {
-    // const timeValue = parseInt(time.value, 10);
-    // if (isNaN(timeValue)) {
-    //     alert("時間が入力されていない、もしくは形式が不正です。");
-    //     return;
-    // }
-    // if (timeValue <= 0){
-    //     alert("時間は1以上の値を入力してください。");
-    //     return;
-    // }
+    const timeValue = parseInt(time.value, 10);
+    if (isNaN(timeValue)) {
+        alert("時間が入力されていない、もしくは形式が不正です。");
+        return;
+    }
+    if (timeValue <= 0){
+        alert("時間は1以上の値を入力してください。");
+        return;
+    }
 
-    // if (repeating.checked) {
-    //     const repeatValue = parseInt(repeat.value, 10);
-    //     const intervalValue = parseInt(interval.value, 10);
-    //     if (isNaN(repeatValue)) {
-    //         alert("繰り返し回数が入力されていない、もしくは形式が不正です。");
-    //         return;
-    //     }
-    //     if (isNaN(intervalValue)) {
-    //         alert("１回ごとに開ける間隔が入力されていない、もしくは形式が不正です。");
-    //         return;
-    //     }
-    //     if (intervalValue < 0) {
-    //         alert("１回ごとに開ける間隔は0以上の値を入力してください。");
-    //         return;
-    //     }
-    // }
+    if (repeating.checked) {
+        const repeatValue = parseInt(repeat.value, 10);
+        const intervalValue = parseInt(interval.value, 10);
+        if (isNaN(repeatValue)) {
+            alert("繰り返し回数が入力されていない、もしくは形式が不正です。");
+            return;
+        }
+        if (isNaN(intervalValue)) {
+            alert("１回ごとに開ける間隔が入力されていない、もしくは形式が不正です。");
+            return;
+        }
+        if (intervalValue < 0) {
+            alert("１回ごとに開ける間隔は0以上の値を入力してください。");
+            return;
+        }
+    }
     startTimer();
 }
 
@@ -212,6 +213,9 @@ function startTimer() {
         timerId = setInterval(updateTimer, 1000);
         saveTimerState();
     }
+    timerContainer.scrollIntoView({
+        behavior: "smooth"
+    });
 }
 
 function stopTimer() {
